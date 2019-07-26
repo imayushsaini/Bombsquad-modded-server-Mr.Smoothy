@@ -1,0 +1,175 @@
+### 1.4.147 (14356)
+- Fixes an issue where a client rejoining a server after being kicked could get stuck in limbo
+- Language updates
+
+### 1.4.145 (14351)
+- Mostly a maintenance release (real work is happening in the 1.5/2.0 branch) - minor bug fixes and a few language updates.
+- Google deprecated some older SDKs, so the minimum Android supported by this build is now 4.4
+
+### 1.4.144 (14350)
+- Added Greek translation
+
+### 1.4.143 (14347)
+- Fixed an issue where server names starting and ending with curly brackets would display incorrectly
+- Fixed an issue where an android back-button press very soon after launch could lead to a crash
+- Fixed a potential crash if a remove-player call is made for a player that has already left
+
+### 1.4.142 (14346)
+- Fixed an issue in my rigid body simulation code which could lead to crashes when large numbers of bodies are present
+
+### 1.4.141 (14344)
+- Fixed a longstanding bug in my huffman compression code that could cause an extra byte of unallocated memory to be read, leading to occasional crashes
+
+### 1.4.140 (14343)
+- Fixed a few minor oustanding bugs from the 1.4.139 update
+
+### 1.4.139 (14340)
+- Added an option to the server builds to point to a server-stats webpage that will show up as an extra link in the server browser (in client 1.4.139+)
+- Server list now re-pings servers less often and averages ping results to reduce the amount of jumping around in the list.  Please holler if this feels off.
+- Added some slick new client-verification tech.  Going forward it should be pretty much impossible to fool a server into thinking you are using a different account than you really are.
+- Added a 'get_account_id()' method to the bs.Player class.  This will return a player's signed-in account-id (when it can be verified for certain)
+
+### 1.4.138 (14336)
+- Removed SDL library from the server builds, so that's one less dependency that needs to be installed when setting up a linux server
+
+### 1.4.137 (14331)
+- Lots of internal code cleanup and reorganization before I dig into networking rework (hopefully didnt break too much)
+- Slowly cleaning up Python files (hoping to move closer to to PEP 8 standards and eventually Python 3)
+- Added Hindi language
+- Cleared out some old build types (farewell OUYA; thanks for the memories)
+- Added support for meshes with > 65535 verts (though turns out OpenGL ES2 doesn't support this so moot at the moment)
+
+### 1.4.136 (14327)
+- Updated 'kiosk mode' functionality (used for simple demo versions of the game)
+- Lots of work getting VR builds up to date
+- Fixed an issue where 'report this player' window would show up behind the window that spawned it
+- (internal) Lots of code cleanup including refactoring bsGraphics into bsGraphicsClient and bsGraphicsServer
+
+### 1.4.135 (14324)
+- Updated various SDKs for the android build (now building against api 27, removed inmobi ads, etc)
+
+### 1.4.134 (14322)
+- Fixed an issue where the internal keyboard would sometimes show up behind game windows
+- Fixed an issue where UI widget selection would sometimes loop incorrectly at window edges
+- Fixed an issue where overlay windows such as the quit dialog would allow clicks to pass through to regular windows under them
+- Work on 2.0 UI (not yet enabled)
+- (internal) Cleaned up JNI layer
+- (internal) Got nvidia china build working again and added way for it to override master server addr
+- (internal) Added mikirog icon
+- (internal) Upgraded cardboard build to use GVR sdk
+
+### 1.4.133 (14318)
+- Pro upgrade now unlocks custom team names and colors in teams mode
+- Added a 'Mute Chat' option for completely ignoring incoming chat messages
+- Fixed a longstanding issue where player-selectors could get 'stuck'
+- Pro upgrade now unlocks a new exact color picker option for character colors/highlights/etc.
+- Added new flag icons to the store: Iran, Poland, Argentina, Philippines, and Chile
+- Added an option for translators to be notified by the game whenever there are new phrases to translate (under settings->advanced)
+- Increased quality on some models, textures and audio
+- Assault no longer counts dead bodies hitting the flag as scores
+- Replay speed can now be controlled with -/= keys (on devices with keyboards)
+- Added Serbian language
+- (internal) Added value-fallbacks to Lstr
+- (internal) Internal Lstr compiler will now complain if long versions of args are passed; want to get everything compact as possible
+- Remote app connections are now disabled by default on server builds
+- Server wrapper script now supports python 3 in addition to python 2. (Python 3 support in the actual game will still be a while)
+- (internal) Updated internal scripts to explicitly use python 2.7 (due to homebrew now pointing 'python' to python 3)
+- Added better crash reporting on Android so I can hopefully fix bugs quicker
+- (internal) Wired up Crashlytics on Android and disabled Firebase Crash Reporting and Google Analytics Crash Reporting
+- (internal) Turned google-services gradle plugin back on (but in a way that only affects google builds)
+- bs.Lstr() can now take a 'fallbackResource' or 'fallbackValue' argument; the old 'fallback' argument is deprecated
+- Removed the long-since-deprecated bs.translate() and bs.getResource() calls (bs.Lstr() should be used for all that stuff now)
+- Removed some deprecated functions from GameActivity: getInstanceScoreBoardNameLocalized(), getInstanceNameLocalized(), getConfigDescriptionLocalized()
+- (internal) Now supports Lstr clientMessages from the server
+
+### 1.4.132 (14316)
+- Fixed an issue where the game could get stuck in a black screen after resuming on Android
+
+### 1.4.131 (14315)
+- Replay playback speed can now be adjusted in the menu
+- Fixed an issue with touch controls showing up while in party chat
+- Fixed issues with the new anti-turbo logic when hosting
+
+### 1.4.130 (14313)
+- New character: Grumbledorf the Wizard
+- Improved public party browsing performance
+- Added protections against turbo exploits when hosting
+- Fixed issues with some Android controllers not being recognized
+
+### 1.4.126 (14307)
+- Improved keyboard and mouse support on Android
+
+### 1.4.125 (14306)
+- Added support for keyboards on Android
+- Added support for desktop-like environments such as Samsung DeX and Chromebooks on Android
+- Optimized game UI for wide-screen layouts such as the Galaxy Note 8
+
+### 1.4.121 (14302)
+- Added support for account unlinking
+
+### 1.4.118 (14298)
+- Added 64 bit arm binary to Android builds
+
+### 1.4.111 (14286)
+- BombSquad Pro now unlocks 2 additional characters
+- multi-line chat messages are now clamped down to 1 line; should prevent annoying multi-line fullscreen message spam
+
+### 1.4.106 (14280)
+- the game will now only print 'game full' player-rejection messages to the client attempting to join; should reduce annoying message spam.
+
+### 1.4.101 (14268)
+- the game will now attempt to load connecting players' profiles and info from my master-server instead of trusting the player; should reduce cheating
+
+### 1.4.100 (14264)
+- added a 'playlistCode' option in the server config which corresponds with playlist codes added in BombSquad 1.4.100 (used for sharing playlists with friends). Now you can create a custom playlist, grab a code for it, and easily use it in a dedicated server.
+
+### 1.4.99 (14252)
+- there is now a forced 10 second delay between a player leaving the game and another player from that same client joining the game.  This should fix the exploit where players were leaving and re-joining to avoid spawn times.
+- most in-game text is now set as bs.Lstr() values so that they show up in the client's own language instead of the server's  There are currently a few exceptions such as time values which I need to address.
+
+### 1.4.98 (14248)
+- added kick-votes that can be started by any client.  currently a client must type '0' or '1' in chat to vote, but i'll add buttons for them soon.
+- modified text nodes so they can display in each client's own language.  (most text nodes don't do this yet but the capability is there).  However this means older clients can't connect to 1.4.98 servers, so you may want to stick with an older server for a bit until the userbase gets more updated.
+
+### 1.4.97 (14247)
+- back to displaying long names in more places; mainly just the in-game ones are clamped..  trying to find a good balance..
+
+### 1.4.97 (14246)
+- public party names will now show up for clients as the title of their party windows instead of "My Party" and also during connect/disconnect (requires client 14246+)
+- server now ignores 'locked' states on maps/game-types, so meteor-shower, target-practice, etc. should work now
+
+### 1.4.97 (14244)
+- kicked players are now unable to rejoin for a several minutes
+
+### 1.4.96 (14242)
+- chat messages and the party window now show player names instead of account names when possible
+- server now clamps in-game names to 8 characters so there's some hope of reading them in-game. Can loosen this or add controls for how clamping happens if need be.
+
+### 1.4.96 (14241)
+- added an automatic chat-block to combat chat spammers. Blocks start at 10 seconds and double in duration for each repeat offense
+
+### 1.4.95 (14240)
+- fixed an issue where a single account could not be used to host multiple parties at once
+
+### 1.4.95 (14236)
+- added a port option to the config so its now possible to host multiple parties on one machine (note that bombsquad 1.4.95+ is required to connect ports aside from 43210)
+
+### 1.4.95 (14234)
+- fixed a bug that could cause the windows version to freeze randomly after a while
+
+### 1.4.95 (14233)
+- bombsquad (both bs_headless and regular) now reads commands from standard input, making it easier to run commands via scripts or the terminal
+- server now runs using a 'server' account-type instead of the local 'device' account. (avoids daily-ticket-reward messages and other stuff that's not relevant to servers)
+- the server script now passes args to the game as a json file instead of individual args; this should keep things cleaner and more expandable
+- the bombsquad_server script also now reads commands from stdin, allowing reconfiguring server settings on the fly
+- added more options such as the ability to set game series lengths and to host a non-public party
+
+### 1.4.94
+- now have mac, windows, and both 32 and 64 bit linux server builds
+- added an optional config.py file that can be used instead of modifying the server script itself
+- added an autoBalanceTeams option for teams games
+- people joining and leaving the party are no longer announced (too much noise)
+
+### 1.4.93
+- should now properly allow clients to use their unlocked characters
+- added an option to enable telnet access

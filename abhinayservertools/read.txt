@@ -1,0 +1,53 @@
+script by abhinaY
+
+
+for server maintenance like banning account or announcing admin online message
+
+#############Installation###########
+
+open bsLobby.py
+
+
+search for 
+
+     def _getName(self,full=False):
+
+and add these lines 
+
+     from abhinayServerTools import abhinayServerTools 
+     abhinayServerTools().databaseWaiting(name,self._player) 
+
+
+now search for 
+     def _setReady(self,ready): 
+
+add these lines 
+     from abhinayServerTools import abhinayServerTools
+     abhinayServerTools().databaseReady(self._player.getName(True),self._player) 
+
+
+
+Open bsGame.py
+
+search   def onPlayerRequest(self, player):
+
+add these lines
+     from abhinayServerTools import abhinayServerTools 
+     abhinayServerTools().banexecute(player)
+
+search 
+    def onPlayerLeave(self, player): 
+
+add these lines
+	from abhinayServerTools import abhinayServerTools 
+        abhinayServerTools().databaseLeave(player.getName(full=True),player)
+
+
+restart your server after editing , it will install and add astconfig.py and serverdata.db
+
+config you astconfig.py 
+
+and restart your server again
+
+
+contact discord @mr.smoothy#5824 for any help

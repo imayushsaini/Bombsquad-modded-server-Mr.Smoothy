@@ -1,0 +1,7 @@
+vipHashes = []
+adminHashes = ['\xee\x80\xa0Clash5680','\xee\x80\xb0PC ID','\xee\x80\xb0Android ID']
+frndHashes = ['\xee\x80\xa0TenseBogeyman35093','\xee\x80\xb0Android31129806']
+autoKickList = ['pb-IF4FV086Hw==', 'pb-JiNJARBfVUJAW19EGENUXFNLF0ldRVZB', 'pb-IF5cV2EFBg==', u'Pan', u'Wallace', u'ShootingGa...', u'fred', 'pb-IF4DV1pYFA==', 'pb-IF4WV04yLw==', 'pb-JiNJARBcVkVCXFZBF0FWV1NLE0dWT1hH', 'pb-IF4SV1VYMQ==', 'pb-IF5UEhMY']
+royalpass=['\xee\x80\xa0imayushsainiz','\xee\x80\xb0Android35879878','\xee\x80\xb0PC195386','\xee\x80\xa0SnehaParmarMer','\xee\x80\xa0helliswellsb03']
+sneha=['\xee\x80\xa0SnehaParmarMer']
+ayush=['\xee\x80\xa0imayushsainiz','\xee\x80\xa0helliswellsb03']
