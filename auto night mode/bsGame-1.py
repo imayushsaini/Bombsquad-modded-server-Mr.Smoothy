@@ -8,7 +8,7 @@ import time
 import pytz
 import datetime
 
-#auto nightmode by mr.smoothy 
+#auto nightmode by mr.smoothy   https://github.com/imayushsaini/Bombsquad-Mr.Smoothy-Admin-Powerup-Server
 
 
 

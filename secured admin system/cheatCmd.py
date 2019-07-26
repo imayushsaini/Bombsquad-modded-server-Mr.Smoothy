@@ -1,5 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
-#modified by mr.Smoothy
+#modified by mr.Smoothy   https://github.com/imayushsaini/Bombsquad-Mr.Smoothy-Admin-Powerup-Server
 import bs
 import bsInternal
 import bsPowerup
@@ -652,7 +652,7 @@ class cheatOptions(object):
                         bsInternal._chatMessage('Using: /spaz all or number of list')
                     else:
                         try:
-                            if a[0] == 'all':
+                            if a[0] == 'all': #mr.smoothy
                                 if self.checkAdmin(nick):
                                     if a[1] in ['ali','agent','bunny','cyborg','pixie','robot','alien','witch','wizard','bones','santa','zoe']:
                                         for i in bs.getSession().players:
@@ -1134,3 +1134,4 @@ bs.realTimer(5000,bs.Call(bsInternal._setPartyIconAlwaysVisible,True))
 import bsUI
 bs.realTimer(10000,bs.Call(bsUI.onPartyIconActivate,(0,0)))## THATS THE TRICKY PART check ==> 23858 bsUI / _handleLocalChatMessage
 
+#for help contact mr.smoothy#5824 on discord

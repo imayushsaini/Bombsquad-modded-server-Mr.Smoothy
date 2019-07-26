@@ -59,6 +59,7 @@ def __init__(self,color=(1,1,1),highlight=(0.5,0.5,0.5),character="Spaz",player=
         Note: this does not wire up any controls;
         you must call connectControlsToPlayer() to do so.
         """
+        #https://github.com/imayushsaini/Bombsquad-Mr.Smoothy-Admin-Powerup-Server
         # convert None to an empty player-ref
         if player is None: player = bs.Player(None)
         
