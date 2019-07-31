@@ -66,4 +66,4 @@ hurray you have done...........
 contact @mr.smoothy#5824 (discord) for help
 
 
-dont forget to give credit or giving
+dont forget to give credit or giving me admin :P
