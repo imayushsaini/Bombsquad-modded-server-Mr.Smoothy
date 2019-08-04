@@ -177,7 +177,7 @@ class cheatOptions(object):
                     if self.checkAdmin(nick):
                         clID = int(a[0])
                         updated_admins=[]
-                        updated_admins=MID.admins
+                        updated_admins=MID.vips
                         for client in bsInternal._getGameRoster():
                             if client['clientID']==clID:
                                 cl_str = client['displayString']
@@ -194,7 +194,7 @@ class cheatOptions(object):
                                         fi.close()
                                 elif a[1] == 'remove':
                                    
-                                    if newadmin in MID.admins:
+                                    if newadmin in MID.vips:
                                         updated_admins.remove(newadmin)
 
                         if True:
@@ -215,7 +215,7 @@ class cheatOptions(object):
                     if self.checkAdmin(nick):
                         clID = int(a[0])
                         updated_admins=[]
-                        updated_admins=MID.admins
+                        updated_admins=MID.members
                         for client in bsInternal._getGameRoster():
                             if client['clientID']==clID:
                                 cl_str = client['displayString']
@@ -232,7 +232,7 @@ class cheatOptions(object):
                                         fi.close()
                                 elif a[1] == 'remove':
                                    
-                                    if newadmin in MID.admins:
+                                    if newadmin in MID.members:
                                         updated_admins.remove(newadmin)
 
                         if True:
