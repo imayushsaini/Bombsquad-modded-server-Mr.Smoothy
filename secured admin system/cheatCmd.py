@@ -588,38 +588,15 @@ class cheatOptions(object):
                     if self.checkAdmin(nick):
                         if a == []:
                             for i in range(len(activity.players)):
-                                bs.getActivity().players[i].actor.node.handleMessage(bs.PowerupMessage(powerupType = 'punch'))
-                                bs.getActivity().players[i].actor.node.handleMessage(bs.PowerupMessage(powerupType = 'health'))
-                                bs.getActivity().players[i].actor.node.handleMessage(bs.PowerupMessage(powerupType = 'shield'))
-                            bsInternal._chatMessage('MUST USE PLAYER ID OR NICK')
+                                if activity.players[i].getName().encode('utf-8').find(nick.encode('utf-8').replace('...','').replace(':','')) != -1:
+                                    activity.players[i].actor.node.hockey = activity.players[i].actor.node.hockey == False
+                                    activity.players[i].actor.node.invincible = activity.players[i].actor.node.invincible == False
+                                    activity.players[i].actor._punchPowerScale = 5 if activity.players[i].actor._punchPowerScale == 1.2 else 1.2
                         else:
-                            if a[0]=='all':
-                                for i in bs.getActivity().players:
-                                    try:
-                                        if i.actor.exists():
-                                           i.actor.node.handleMessage(bs.PowerupMessage(powerupType = 'punch'))
-                                          
-                                    except Exception:
-                                        pass
-                            if len(a[0]) > 2:
-                               for i in bs.getActivity().players:
-                                   try:
-                                       if (i.getName()).encode('utf-8') == (a[0]):
-                                          if i.actor.exists():
-                                             i.actor.node.handleMessage(bs.PowerupMessage(powerupType = 'punch'))
-                                             i.actor.node.handleMessage(bs.PowerupMessage(powerupType = 'health'))
-                                             i.actor.node.handleMessage(bs.PowerupMessage(powerupType = 'shield'))
-                                   except Exception:
-                                       pass
-                               bsInternal._chatMessage(bs.getSpecialChar('logoFlat'))
-                            else:
-                                 try:
-                                     bs.getActivity().players[int(a[0])].actor.node.handleMessage(bs.PowerupMessage(powerupType = 'punch'))
-                                     bs.getActivity().players[int(a[0])].actor.node.handleMessage(bs.PowerupMessage(powerupType = 'health'))
-                                     bs.getActivity().players[int(a[0])].actor.node.handleMessage(bs.PowerupMessage(powerupType = 'shield'))
-                                     bsInternal._chatMessage(bs.getSpecialChar('logoFlat'))
-                                 except Exception:
-                                     bsInternal._chatMessage('PLAYER NOT FOUND')
+                            activity.players[int(a[0])].actor.node.hockey = activity.players[int(a[0])].actor.node.hockey == False
+                            activity.players[int(a[0])].actor.node.invincible = activity.players[int(a[0])].actor.node.invincible == False
+                            activity.players[int(a[0])].actor._punchPowerScale = 5 if activity.players[int(a[0])].actor._punchPowerScale == 1.2 else 1.2
+
                 elif m == '/tint':
                     if self.checkAdmin(nick):
                         if a == []:
