@@ -20,6 +20,6 @@ just check the path of stats.json and rank/toprank.py  and modify path in  prefi
 and yes need to remove old tag scripts .. or copy paste code to your old scripts (for modders).
 
 
-for any help discord @mr.smoothy@5824 or raise issue on github 
+for any help discord @mr.smoothy@5824 or raise issue on github
 
 https://github.com/imayushsaini/Bombsquad-modded-server-Mr.Smoothy
