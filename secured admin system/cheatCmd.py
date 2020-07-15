@@ -169,7 +169,7 @@ class cheatOptions(object):
                         bs.playSound(bs.getSound('ooh'),volume = 2)
 
                 elif m=='/me':
-                    if a==[]
+                    if a==[]:
                         playeraccountid=''   #  https://github.com/imayushsaini/Bombsquad-modded-server-Mr.Smoothy
                         playername=''
                         for i in bsInternal._getForegroundHostActivity().players:
