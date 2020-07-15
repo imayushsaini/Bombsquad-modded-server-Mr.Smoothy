@@ -169,14 +169,24 @@ class cheatOptions(object):
                         bs.playSound(bs.getSound('ooh'),volume = 2)
 
                 elif m=='/me':
-                    playeraccountid=''   #  https://github.com/imayushsaini/Bombsquad-modded-server-Mr.Smoothy
-                    playername=''
-                    for i in bsInternal._getForegroundHostActivity().players:
-            
-                        if i.getInputDevice().getClientID()==clientID:
-                            
-                            playeraccountid=i.get_account_id()
-                            playername=i.getName()
+                    if a==[]
+                        playeraccountid=''   #  https://github.com/imayushsaini/Bombsquad-modded-server-Mr.Smoothy
+                        playername=''
+                        for i in bsInternal._getForegroundHostActivity().players:
+                
+                            if i.getInputDevice().getClientID()==clientID:
+                                
+                                playeraccountid=i.get_account_id()
+                                playername=i.getName()
+                    else:
+                        playeraccountid=''   #  https://github.com/imayushsaini/Bombsquad-modded-server-Mr.Smoothy
+                        playername=''
+                        for i in bsInternal._getForegroundHostActivity().players:
+                
+                            if i.getInputDevice().getClientID()==int(a[0]):
+                                
+                                playeraccountid=i.get_account_id()
+                                playername=i.getName()
                     if os.path.exists('stats.json'):
                         while True:
                             try:
@@ -194,8 +204,8 @@ class cheatOptions(object):
                         killed=stats[playeraccountid]['killed']
                         kills=stats[playeraccountid]['kills']
                         
-                    bs.screenMessage(playername+':'+' Kills:'+str(kills)+', Killed:'+str(killed)+', Matches:'+str(stats[playeraccountid]['played']),color=(0,1,1),transient=True)
-               
+                        bs.screenMessage(playername+':'+' Kills:'+str(kills)+', Killed:'+str(killed)+', Matches:'+str(stats[playeraccountid]['played']),color=(0,1,1),transient=True)
+                
 
                 elif m == '/admin':
                     if self.checkOwner(nick):

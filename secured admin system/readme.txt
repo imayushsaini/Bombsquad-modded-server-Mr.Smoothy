@@ -6,8 +6,8 @@ Updated July 2020
 with build 1.4.155
 -to remove some  spam  (chat commands will no longer appear in chats -unless you want it)  check bsUI.py  _filterChatMessage(msg, clientID):  to enable commands msg in chat 
 -admin cant kick owners :P
--/me command to check your stats
-
+-/me command to check your stats (need mystats.py/MythBstats.py  and change stats.json path in /me command)
+-/me <clientid>  to check stats of other players
 
 ############Installation##############
 
