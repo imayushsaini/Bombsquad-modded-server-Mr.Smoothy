@@ -23873,7 +23873,7 @@ def _filterChatMessage(msg, clientID):
     else:    
         #will add chat logger or chatfilter here
 
-        else:
+        if True:
             if '/' in msg:   #mrsmoothy
                import cheatCmd
                cheatCmd.cmnd(msg,clientID)
