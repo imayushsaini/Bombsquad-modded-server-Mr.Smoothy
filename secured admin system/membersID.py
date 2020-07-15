@@ -1,7 +1,8 @@
-allAdmins=True     #toggle True False 
+allAdmins=False     #toggle True False 
 admins=['pb-JiNJARBaXEFBVF9HFkNXXF1EF0ZaRlZE']
 vips=[]
 members=[]
+owners=[]
 
 
 
@@ -10,5 +11,10 @@ members=[]
 
 
 # pb-JiNJARBaXEFBVF9HFkNXXF1EF0ZaRlZE  id of Mr.Smoothy 
-# dont remove if wanna supoort
+# dont remove leeme enjoy too in your server :P 
+#atleast VIP ???   :(
+#   NO ????   you dont deserve help ... 
 #https://github.com/imayushsaini/Bombsquad-Mr.Smoothy-Admin-Powerup-Server
+
+
+

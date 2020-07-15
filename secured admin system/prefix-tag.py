@@ -11,7 +11,7 @@ class PermissionEffect(object):
         self.position = position
         self.owner = owner
         
-       
+         #  https://github.com/imayushsaini/Bombsquad-modded-server-Mr.Smoothy
 
         
         def a():
@@ -82,7 +82,7 @@ def __init__(self,color=(1,1,1),highlight=(0.5,0.5,0.5),character="Spaz",player=
         clID = self._player.getInputDevice().getClientID()
         
 
-        
+          #  https://github.com/imayushsaini/Bombsquad-modded-server-Mr.Smoothy
        
         #bsInternal._chatMessage(str(clID)+'clid')
         #bsInternal._chatMessage(str(self._player.get_account_id()))

@@ -1,5 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
-#modified by mr.Smoothy   https://github.com/imayushsaini/Bombsquad-Mr.Smoothy-Admin-Powerup-Server
+#https://github.com/imayushsaini/Bombsquad-modded-server-Mr.Smoothy
 import bs
 import bsInternal
 import bsPowerup
@@ -7,10 +7,12 @@ import bsUtils
 import random
 import membersID as MID
 import BuddyBunny
+import os
+import threading
+import json
 
 
-#import settings
-#import portalObjects
+
 
 class cheatOptions(object):
     def __init__(self):
@@ -18,54 +20,70 @@ class cheatOptions(object):
        
         
         self.tint = None # needs for /nv
-        
-    def checkAdmin(self,nick): 
+    
+    def checkOwner(self,clientID): 
        
         client='kuchbhi'
         
         for i in bsInternal._getForegroundHostActivity().players:
             
-            if i.getName().encode('utf-8').find(nick)!=-1:
+            if i.getInputDevice().getClientID()==clientID:
                 client=i.get_account_id()
         
-        if client in MID.admins or MID.allAdmins: 
-            bsInternal._chatMessage("cheat activated")   #only admin access
+        if client in MID.owners or MID.allAdmins: 
+            bs.screenMessage('cheat activated',color=(0,1,0), clients=[clientID], transient=True)
             return True
             
         else:
-            bsInternal._chatMessage("access denied")
-        
+            bs.screenMessage('access denied',color=(1,0,0), clients=[clientID], transient=True)
 
-    def checkMember(self,nick): 
-       client='kuchbhi'
-        
-       for i in bsInternal._getForegroundHostActivity().players:
-            
-            if i.getName().encode('utf-8').find(nick)!=-1:
-                client=i.get_account_id()
-        
-       if client in MID.admins or client in MID.members or client in MID.vips:   #member,vip,admin will have access
-            bsInternal._chatMessage("cheat activated")
-            return True
-           
-       else:
-            bsInternal._chatMessage("access denied")
-
-      
-    def checkVip(self,nick):
+    def checkAdmin(self,clientID): 
+       
         client='kuchbhi'
         
         for i in bsInternal._getForegroundHostActivity().players:
             
-            if i.getName().encode('utf-8').find(nick)!=-1:
+            if i.getInputDevice().getClientID()==clientID:
                 client=i.get_account_id()
         
-        if client in MID.admins or client in MID.vips:         #only admin and vip can access
-            bsInternal._chatMessage("cheat activated")
+        if client in MID.admins or MID.allAdmins: 
+            bs.screenMessage('cheat activated',color=(0,1,0), clients=[clientID], transient=True)
             return True
             
         else:
-            bsInternal._chatMessage("access denied")
+            bs.screenMessage('access denied',color=(1,0,0), clients=[clientID], transient=True)
+        
+
+    def checkMember(self,clientID): 
+       client='kuchbhi'
+        
+       for i in bsInternal._getForegroundHostActivity().players:
+            
+            if i.getInputDevice().getClientID()==clientID:
+                client=i.get_account_id()
+        
+       if client in MID.admins or client in MID.members  or  client in MID.owners or MID.allAdmins:   #member,vip,admin will have access
+            bs.screenMessage('cheat activated',color=(0,1,0), clients=[clientID], transient=True)
+            return True
+           
+       else:
+            bs.screenMessage('access denied',color=(1,0,0), clients=[clientID], transient=True)
+
+      
+    def checkVip(self,clientID):
+        client='kuchbhi'
+        
+        for i in bsInternal._getForegroundHostActivity().players:
+            
+            if i.getInputDevice().getClientID()==clientID:
+                client=i.get_account_id()
+        
+        if client in MID.admins or client in MID.vips or  client in MID.owners or MID.allAdmins:         #only admin and vip can access
+            bs.screenMessage('cheat activated',color=(0,1,0), clients=[clientID], transient=True)
+            return True
+            
+        else:
+            bs.screenMessage('access denied',color=(1,0,0), clients=[clientID], transient=True)
 
     def kickByNick(self,nick):
         roster = bsInternal._getGameRoster()
@@ -75,25 +93,40 @@ class cheatOptions(object):
                     bsInternal._disconnectClient(int(i['clientID']))
             except:
                 pass
-        
-    def opt(self,nick,msg):
-        if self.checkMember:
+      #  https://github.com/imayushsaini/Bombsquad-modded-server-Mr.Smoothy
+    def opt(self,clientID,msg):
+        nick=clientID
+        if True:
             m = msg.split(' ')[0] # command
             a = msg.split(' ')[1:] # arguments
             
             activity = bsInternal._getForegroundHostActivity()
             with bs.Context(activity):
                 if m == '/kick':
-                    if self.checkAdmin(nick):
+                    if self.checkAdmin(clientID):
                         if a == []:
-                            bsInternal._chatMessage('Using: /kick name or number of list')
+                            bs.screenMessage('kick using name of clientID',color=(0,1,0), clients=[clientID], transient=True)
                         else:
                             if len(a[0]) > 3:
-                                self.kickByNick(a[0])
+                                if(self.checkOwner(nick)!=True):
+                                    
+                                    self.kickByNick(a[0])
+                                else:
+                                    bs.screenMessage('cant kick owner',color=(1,0,0), clients=[clientID], transient=True)   
                             else:
                                 try:
+                                    
+
                                     s = int(a[0])
-                                    bsInternal._disconnectClient(int(a[0]))
+                                    for cl in bsInternal._getForegroundHostSession().players:
+                                        if(cl.getInputDevice().getClientID()==s):
+                                            accountid=cl.get_account_id()
+  #defend your self from dhokebaaz admins......  
+                                    if accountid in MID.owners:
+                                        bs.screenMessage('cant kick owner',color=(1,0,0), clients=[clientID], transient=True)
+                                    else:    
+                                        
+                                        bsInternal._disconnectClient(int(a[0]))
                                 except:
                                     self.kickByNick(a[0])
                    
@@ -110,18 +143,19 @@ class cheatOptions(object):
                                     bsInternal._disconnectClient(int(a[0]))
                                 except:
                                     self.kickByNick(a[0])
-                elif m == '/list':
+                elif m == '/list':     #need to add some delay , else you will only last players id ...   do it yourself , as i dont use much list command
                     if self.checkMember(nick):
-                        bsInternal._chatMessage("======== FOR /kick ONLY: ========")
+                        bs.screenMessage('========For kick=======',color=(1,0,0), clients=[clientID], transient=True)
                         for i in bsInternal._getGameRoster():
                             try:
-                                bsInternal._chatMessage(i['players'][0]['nameFull'].encode('utf-8') + "     (/kick " + str(i['clientID'])+")")
+                                bs.screenMessage(i['players'][0]['nameFull'].encode('utf-8') + "     (/kick " + str(i['clientID'])+")",color=(1,0.4,0), clients=[clientID], transient=True)
+                                
                             except:
                                 pass
-                        bsInternal._chatMessage("==================================")
-                        bsInternal._chatMessage("======= For other commands: =======")
+                        bs.screenMessage('=================',color=(1,0,0), clients=[clientID], transient=True)
+                        bs.screenMessage('========For Other Commands=======',color=(1,0.6,0.4), clients=[clientID], transient=True)
                         for s in bsInternal._getForegroundHostSession().players:
-                            bsInternal._chatMessage(s.getName() + "     "+ str(bsInternal._getForegroundHostSession().players.index(s)))
+                            bs.screenMessage(s.getName() + "     "+ str(bsInternal._getForegroundHostSession().players.index(s)),color=(0.5,0.7,0.3), clients=[clientID], transient=True)
                 elif m == '/ooh':
                     if a is not None and len(a) > 0:
                         s = int(a[0])
@@ -134,9 +168,37 @@ class cheatOptions(object):
                     else:
                         bs.playSound(bs.getSound('ooh'),volume = 2)
 
+                elif m=='/me':
+                    playeraccountid=''   #  https://github.com/imayushsaini/Bombsquad-modded-server-Mr.Smoothy
+                    playername=''
+                    for i in bsInternal._getForegroundHostActivity().players:
+            
+                        if i.getInputDevice().getClientID()==clientID:
+                            
+                            playeraccountid=i.get_account_id()
+                            playername=i.getName()
+                    if os.path.exists('stats.json'):
+                        while True:
+                            try:
+                                with open('stats.json') as f:
+                                    stats = json.loads(f.read())
+                                    break
+                            except Exception as (e):
+                                print e
+                                time.sleep(0.05)
+                    else:
+                        stats = {}
+                    if playeraccountid not in stats:
+                        bs.screenMessage('Not played any match yet',color=(0,1,1),transient=True)
+                    else:    
+                        killed=stats[playeraccountid]['killed']
+                        kills=stats[playeraccountid]['kills']
+                        
+                    bs.screenMessage(playername+':'+' Kills:'+str(kills)+', Killed:'+str(killed)+', Matches:'+str(stats[playeraccountid]['played']),color=(0,1,1),transient=True)
+               
 
                 elif m == '/admin':
-                    if self.checkAdmin(nick):
+                    if self.checkOwner(nick):
                         clID = int(a[0])
                         updated_admins=[]
                         updated_admins=MID.admins
@@ -171,7 +233,7 @@ class cheatOptions(object):
                                 f.close()
                                 reload(MID)
                         else:
-                            pass
+                            pass  #  https://github.com/imayushsaini/Bombsquad-modded-server-Mr.Smoothy
 
                 elif m == '/vip':
                     if self.checkAdmin(nick):
@@ -212,7 +274,7 @@ class cheatOptions(object):
                             pass
 
                 elif m == '/member':
-                    if self.checkAdmin(nick):
+                    if self.checkOwner(nick):
                         clID = int(a[0])
                         updated_admins=[]
                         updated_admins=MID.members
@@ -260,7 +322,7 @@ class cheatOptions(object):
                     else:
                         bs.playSound(bs.getSound(str(a[0])),volume = 2)
                 elif m == '/quit':
-                    if self.checkAdmin(nick):
+                    if self.checkOwner(nick):
                         bsInternal.quit()
                 elif m == '/nv':
                     if self.tint is None:
@@ -269,7 +331,8 @@ class cheatOptions(object):
                 elif m == '/freeze':
                     if self.checkMember(nick):
                         if a == []:
-                            bsInternal._chatMessage('Using: /freeze all or number of list')
+                            
+                            bs.screenMessage('Using: /freeze all or number of list',color=(0,0,1), clients=[clientID], transient=True)
                         else:
                             if a[0] == 'all':
                                 if self.checkVip(nick):
@@ -283,7 +346,8 @@ class cheatOptions(object):
                                 bs.getSession().players[int(a[0])].actor.node.handleMessage(bs.FreezeMessage())
                 elif m == '/thaw':
                     if a == []:
-                        bsInternal._chatMessage('Using: /thaw all or number of list')
+                        
+                        bs.screenMessage('Using: /thaw all or number of list',color=(0,0,1), clients=[clientID], transient=True)
                     else:
                         if a[0] == 'all':
                             for i in bs.getSession().players:
@@ -303,11 +367,12 @@ class cheatOptions(object):
                     if self.checkVip(nick):
                         if a == []:
                             
-                                bsInternal._chatMessage('Using: /kill all or number of list')
+                               
+                                bs.screenMessage('Using: /kill all or number of list',color=(0,0,1), clients=[clientID], transient=True)
                         else:
                             
                             if a[0] == 'all':
-                                if self.checkVip(nick):
+                                if self.checkAdmin(nick):
                                     for i in bs.getSession().players:
                                         try:
                                             i.actor.node.handleMessage(bs.DieMessage())
@@ -318,7 +383,8 @@ class cheatOptions(object):
                 elif m == '/curse':
                     if self.checkMember(nick):
                         if a == []:
-                            bsInternal._chatMessage('Using: /curse all or number of list')
+                            
+                            bs.screenMessage('Using: /curse all or number of list',color=(0,0,1), clients=[clientID], transient=True)
                         else:
                             if a[0] == 'all':
                                 if self.checkAdmin(nick):
@@ -331,7 +397,8 @@ class cheatOptions(object):
                                     bs.getSession().players[int(a[0])].actor.curse()
                 elif m == '/box':
                     if a == []:
-                        bsInternal._chatMessage('Using: /box all or number of list')
+                        
+                        bs.screenMessage('Using: /box all or number of list',color=(0,0,1), clients=[clientID], transient=True)
                     else:
                         try:
                             if a[0] == 'all':
@@ -386,7 +453,8 @@ class cheatOptions(object):
                 
                 elif m == '/mine':
                     if a == []:
-                        bsInternal._chatMessage('Using: /mine all or number of list')
+                        
+                        bs.screenMessage('Using: /mine all or number of list',color=(0,0,1), clients=[clientID], transient=True)
                     else:
                         try:
                             if a[0] == 'all':
@@ -438,9 +506,10 @@ class cheatOptions(object):
                         except:
                            pass           
 
-                elif m == '/headless': 
+                elif m == '/headless':   #  https://github.com/imayushsaini/Bombsquad-modded-server-Mr.Smoothy
                     if a == []:
-                        bsInternal._chatMessage('MUST USE PLAYER ID OR NICK')
+                        
+                        bs.screenMessage('Using: /headless all or number of list',color=(0,0,1), clients=[clientID], transient=True)
                     else:
                         if a[0]=='all':
                             for i in bs.getActivity().players:
@@ -473,7 +542,8 @@ class cheatOptions(object):
                 elif m == '/shield': #shield
                     if self.checkAdmin(nick):
                         if a == []:
-                            bsInternal._chatMessage('MUST USE PLAYER ID OR NICK')
+                            
+                            bs.screenMessage('Using: /shield all or number of list',color=(0,0,1), clients=[clientID], transient=True)
                         else:
                             if a[0]=='all':
                                 for i in bs.getActivity().players:
@@ -503,7 +573,8 @@ class cheatOptions(object):
                                  
                 elif m == '/celebrate': #celebrate him
                     if a == []:
-                        bsInternal._chatMessage('MUST USE PLAYER ID OR NICK')
+                       
+                        bs.screenMessage('Using: /celebrate all or number of list',color=(0,0,1), clients=[clientID], transient=True)
                     else:
                         if a[0]=='all':
                             for i in bs.getActivity().players:
@@ -531,7 +602,8 @@ class cheatOptions(object):
                 elif m == '/remove':
                     if self.checkAdmin(nick):
                         if a == []:
-                            bsInternal._chatMessage('Using: /remove all or number of list')
+                            
+                            bs.screenMessage('Using: /remove all or number of list',color=(0,0,1), clients=[clientID], transient=True)
                         else:
                             if a[0] == 'all':
                                 for i in bs.getSession().players:
@@ -548,10 +620,11 @@ class cheatOptions(object):
                         try:
                             bsInternal._getForegroundHostActivity().endGame()
                         except:
-                            pass
+                            pass  #  https://github.com/imayushsaini/Bombsquad-modded-server-Mr.Smoothy
                 elif m == '/hug':
                     if a == []:
-                        bsInternal._chatMessage('Using: /hug all or number of list')
+                        
+                        bs.screenMessage('Using: /hug all or number of list',color=(0,0,1), clients=[clientID], transient=True)
                     else:
                         try:
                             if a[0] == 'all':
@@ -587,7 +660,7 @@ class cheatOptions(object):
                 elif m == '/gm':
                     if self.checkAdmin(nick):
                         if a == []:
-                            for i in range(len(activity.players)):
+                            for i in range(len(activity.players)):   #removed punch and shield ...no need as you are already invicible
                                 if activity.players[i].getName().encode('utf-8').find(nick.encode('utf-8').replace('...','').replace(':','')) != -1:
                                     activity.players[i].actor.node.hockey = activity.players[i].actor.node.hockey == False
                                     activity.players[i].actor.node.invincible = activity.players[i].actor.node.invincible == False
@@ -626,12 +699,13 @@ class cheatOptions(object):
 
                 elif m == '/spaz':
                     if a == []:
-                        bsInternal._chatMessage('Using: /spaz all or number of list')
+                        
+                        bs.screenMessage('Using: /spaz all or number of list',color=(0,0,1), clients=[clientID], transient=True)
                     else:
                         try:
                             if a[0] == 'all': #mr.smoothy
                                 if self.checkAdmin(nick):
-                                    if a[1] in ['ali','agent','bunny','cyborg','pixie','robot','alien','witch','wizard','bones','santa','zoe']:
+                                    if a[1] in ['ali','agent','bunny','cyborg','pixie','robot','alien','witch','wizard','bones','zoe']:
                                         for i in bs.getSession().players:
                                             t = i.actor.node
                                             try:
@@ -654,7 +728,7 @@ class cheatOptions(object):
 
                                     else:
                                         bsInternal._chatMessage('use ali,agent,bunny,cyborg,pixie,robot')
-                                        bsInternal._chatMessage('alien,witch,wizard,bones,santa,zoe')
+                                        bsInternal._chatMessage('alien,witch,wizard,bones,zoe')
                             else:
                                 if a[1] in ['ali','agent','bunny','cyborg','pixie','robot','alien','witch','wizard','bones','santa','zoe']:
                                     n = int(a[0])
@@ -677,7 +751,8 @@ class cheatOptions(object):
 
                 elif m == '/inv':
                     if a == []:
-                        bsInternal._chatMessage('Using: /spaz all or number of list')
+                        
+                        bs.screenMessage('Using: /inv all or number of list',color=(0,0,1), clients=[clientID], transient=True)
                     else:
                         try:
                             if a[0] == 'all':
@@ -686,7 +761,7 @@ class cheatOptions(object):
                                         t = i.actor.node
                                         try:
                                            
-                                            
+                                              #  https://github.com/imayushsaini/Bombsquad-modded-server-Mr.Smoothy
                                             t.headModel =     None
                                             t.torsoModel =    None
                                             t.pelvisModel =   None
@@ -725,7 +800,7 @@ class cheatOptions(object):
                         except:
                             pass
               
-                elif m == '/lm':   
+                elif m == '/lm444':   
                     arr = []
                     for i in range(100):
                         try:
@@ -750,16 +825,18 @@ class cheatOptions(object):
                     if self.checkAdmin(nick):
                         bsInternal._getForegroundHostActivity().players[int(a[0])].actor.node = bsInternal._getForegroundHostActivity().players[int(a[1])].actor.node
                 elif m == '/fly':
-                    if self.checkAdmin(nick):
+                    if True:
                         if a == []:
                             bsInternal._chatMessage('Using: /fly all or number of list')
+                            
                         else:
-                            if a[0] == 'all':
-                                for i in bsInternal._getForegroundHostActivity().players:
-                                    i.actor.node.fly = True
-                            else:
-                                bsInternal._getForegroundHostActivity().players[int(a[0])].actor.node.fly = bsInternal._getForegroundHostActivity().players[int(a[0])].actor.node.fly == False
-                elif m == '/flooorReflection':
+                            if self.checkAdmin(nick):
+                                if a[0] == 'all':
+                                    for i in bsInternal._getForegroundHostActivity().players:
+                                        i.actor.node.fly = True
+                                else:
+                                    bsInternal._getForegroundHostActivity().players[int(a[0])].actor.node.fly = bsInternal._getForegroundHostActivity().players[int(a[0])].actor.node.fly == False
+                elif m == '/floorReflection':
                     if self.checkAdmin(nick):
                         bs.getSharedObject('globals').floorReflection = bs.getSharedObject('globals').floorReflection == False
                 elif m == '/ac':
@@ -794,7 +871,7 @@ class cheatOptions(object):
                         pass
                     for i in activity.players:
                         i.actor.node.hockey = False
-                elif m == '/maxPlayersggggggg':
+                elif m == '/maxPlayers':
                     if self.checkAdmin(nick):
                         if a == []:
                             bsInternal._chatMessage('Using: /maxPlayers count of players')
@@ -818,7 +895,8 @@ class cheatOptions(object):
                         '''
                 elif m == '/heal': #shield
                     if a == []:
-                        bsInternal._chatMessage('MUST USE PLAYER ID OR NICK')
+                        
+                        bs.screenMessage('Using: /heal all or number of list',color=(0,0,1), clients=[clientID], transient=True)
                     else:
                         if a[0]=='all':
                             if self.checkAdmin(nick):
@@ -881,7 +959,7 @@ class cheatOptions(object):
                                  except Exception:
                                      bsInternal._chatMessage('PLAYER NOT FOUND')
                 
-                elif m == '/gift': #shield
+                elif m == '/gift': #random powerup
                     if self.checkAdmin(nick):
                         powerss=['shield','punch','curse','health']
                         if True:
@@ -893,7 +971,7 @@ class cheatOptions(object):
                                            
                                     except Exception:
                                         pass
-                    bsInternal._chatMessage('Return Gifts for all')                    
+                                     
                 elif m == '/reset':
                     type='soft'
                     rs=0
@@ -920,7 +998,7 @@ class cheatOptions(object):
                     bs.getSharedObject('globals').ambientColor = (0,0,0)
                     bs.getSharedObject('globals').tint = (1,1,1)
 
-                elif m== '/disco':
+                elif m== '/disco':  #naacho benchod
                     times=[0]
                     def discoRed():
                         bs.getSharedObject('globals').tint = (1,.6,.6)
@@ -969,7 +1047,8 @@ class cheatOptions(object):
                 elif m == '/shatter':
                     if self.checkAdmin(nick):
                         if a == []:
-                            bsInternal._chatMessage('Using: /shatter all or number of list')
+                            
+                            bs.screenMessage('Using: /shatter all or number of list',color=(0,0,1), clients=[clientID], transient=True)
                         else:
                             if a[0] == 'all':
                                 if self.checkAdmin(nick):
@@ -982,7 +1061,8 @@ class cheatOptions(object):
                 elif m == '/sleep':
                     if self.checkAdmin(nick):
                         if a == []:
-                            bsInternal._chatMessage('Using: number of list')
+                            
+                            bs.screenMessage('Using: /sleep all or number of list',color=(0,0,1), clients=[clientID], transient=True)
                         else:
                             if a[0] == 'all':
                                 for i in bs.getSession().players:
@@ -1082,30 +1162,27 @@ class cheatOptions(object):
                             bsUtils.animateArray(bs.getSharedObject('globals'),'vignetteOuter',3,{0:bs.getSharedObject('globals').vignetteOuter,100:std})
                         bs.gameTimer(time,bs.Call(off))
                 elif m=='/contact':
-                    bsInternal._chatMessage('discord mr.smoothy#5824 whatsapp +91 9457179878 ')
+                    
+                    bs.screenMessage('discord mr.smoothy#5824',color=(0,0,1), clients=[clientID], transient=True)
+
                           
                 elif m == '/help':
-                    bsInternal._chatMessage('Try commands ')
-                    bsInternal._chatMessage('./inv /spaz /box /headless')
-                    bsInternal._chatMessage('./shatter /sleep /iceoff /heal')
-                    bsInternal._chatMessage('./fly /gm /hug /remove /alien all')
-                    bsInternal._chatMessage('./freeze all /nv /ooh /mine all  /sm /end /curse')
-                 
-                   
-                    bsInternal._chatMessage('./kick /remove /bouncer /mix /thanos and many more')
-                    bsInternal._chatMessage('./contact to get discord id')
+                    bs.screenMessage('Try commands ',color=(0,0,1), clients=[clientID], transient=True)
+                    bs.screenMessage('/inv /spaz /box /headless',color=(0,0,1), clients=[clientID], transient=True)
+                    bs.screenMessage('/shatter /sleep /iceoff /heal',color=(0,0,1), clients=[clientID], transient=True)
+                    bs.screenMessage('/fly /gm /hug /remove /alien all',color=(0,0,1), clients=[clientID], transient=True)
+                    bs.screenMessage('/freeze all /nv /ooh /mine all  /sm /end /curse',color=(0,0,1), clients=[clientID], transient=True)
+                    bs.screenMessage('/kick /remove /bouncer /mix /thanos and many more',color=(0,0,1), clients=[clientID], transient=True)
+                    bs.screenMessage('/contact to get discord id',color=(0,0,1), clients=[clientID], transient=True)
+                    
                    
             
 c = cheatOptions()
 
-def cmnd(msg):
+def cmnd(msg,clientID):
     if bsInternal._getForegroundHostActivity() is not None:
-	
-        n = msg.split(': ')
-        if n[0].endswith('...'):
-            c.opt(n[0][:-3],n[1])
-        else:    
-            c.opt(n[0],n[1])
+    
+        c.opt(clientID,msg)
 bs.realTimer(5000,bs.Call(bsInternal._setPartyIconAlwaysVisible,True))
 
 import bsUI

@@ -1,5 +1,0 @@
-chat logged=========
-
-id        gamename          message 
-
-.

@@ -15,6 +15,10 @@ import bsServerData
 import threading
 import bsGame
 
+#chatfilter ,chat logger , chat command   by mr.smoothy 
+#discord @mr.smoothy#5824
+
+  #  https://github.com/imayushsaini/Bombsquad-modded-server-Mr.Smoothy
 uiGlobals = {'mainMenuWindow': None}
 
 gWindowStates = {}
@@ -930,7 +934,8 @@ class CreditsWindow(Window):
             + '\n'.join(translationNames.splitlines()[:146]) +
             '\n'.join(translationNames.splitlines()[146:])+'\n'
             '\n'
-            '  Awesome Modders:\n\n'
+            '  Shout Out to Awesome Mods / Modders:\n\n'
+            '     BombDash ModPack\n'
             '     TheMikirog & SoK - BombSquad Joyride Modpack\n'
             '     Mrmaxmeier - BombSquad-Community-Mod-Manager\n'
             '\n'
@@ -959,7 +964,7 @@ class CreditsWindow(Window):
         scale = 0.55
         self._subWidth = width-80
         self._subHeight = lineHeight * len(lines) + 40
-        
+
         c = self._subContainer = bs.containerWidget(
             parent=s, size=(self._subWidth, self._subHeight),
             background=False, claimsLeftRight=False, claimsTab=False)
@@ -5738,7 +5743,7 @@ class AwaitKeyboardInputWindow(Window):
 
     def _die(self):
         # this strong-refs us; killing it allow us to die now
-        self._decrementTimer = None  
+        self._decrementTimer = None
         if self._rootWidget.exists():
             bs.containerWidget(edit=self._rootWidget, transition='outLeft')
 
@@ -21942,12 +21947,12 @@ class GatherWindow(Window):
                 self._refreshing_public_party_list = True
 
             bs.pushCall(refresh_on)
-            
+
             # janky - allow escaping if there's nothing in us
             bs.containerWidget(
                 edit=self._internetHostScrollWidget,
                 claimsUpDown=(len(orderedParties) > 0))
-            
+
             for i, party in enumerate(orderedParties):
                 hpos = 20
                 vpos = sub_scroll_height - lineheight * i - 50
@@ -22060,7 +22065,7 @@ class GatherWindow(Window):
                 self._refreshing_public_party_list = False
 
             bs.pushCall(refresh_on)
-                    
+
 
     def _on_public_party_activate(self, party):
         if party['queue'] is not None:
@@ -22081,10 +22086,9 @@ class GatherWindow(Window):
                 return
             # rate limit this a bit
             now = time.time()
-            print('public party active mrsmoothy')
             last_connect_time = getattr(
                 self, '_last_public_party_connect_attempt_time', None)
-            if last_connect_time is None or now - last_connect_time > 2000.0:  #mr.smoothy #mrsmoothy
+            if last_connect_time is None or now - last_connect_time > 2.0:
                 bsInternal._connectToParty(address, port=port)
                 self._last_public_party_connect_attempt_time = now
 
@@ -22652,7 +22656,7 @@ class PartyWindow(Window):
                             # host
                             if self._roster[index]['clientID'] is not None:
                                 isHost = True if self._roster[index][
-                                    'clientID'] == 113 else False
+                                    'clientID'] == -1 else False
                             else:
                                 isHost = (index == 0)
 
@@ -22698,11 +22702,9 @@ class PartyWindow(Window):
                     bs.Lstr(resource='internal.cantKickHostError'),
                     color=(1, 0, 0))
             else:
-                bs.screenMessage(
-                    bs.Lstr(resource='internal.cantKickHostError'),
-                    color=(1, 0, 0))
+                # Ban for 5 minutes.
                 result = bsInternal._disconnectClient(
-                    self._popupPartyMemberClientID)
+                    self._popupPartyMemberClientID, banTime=5*60)
                 if not result:
                     bs.playSound(bs.getSound('error'))
                     bs.screenMessage(
@@ -23860,13 +23862,33 @@ class StoreWindow(Window):
             self._onCloseCall()
 
 
+# Called for *all* chat messages while hosting.
+# Messages originating from the host will have clientID -1.
+# Should filter and return the string to be displayed,
+# or return None to ignore the message.
+def _filterChatMessage(msg, clientID):
+    
+    if not msg or not msg.strip():
+        return None
+    else:    
+        #will add chat logger or chatfilter here
+
+        else:
+            if '/' in msg:   #mrsmoothy
+               import cheatCmd
+               cheatCmd.cmnd(msg,clientID)
+               return None      #change to return msg     to enable commands in chat
+            else:
+
+                return msg
+
+
+# Called for local chat messages when the party window is up.
 def _handleLocalChatMessage(msg):
     global gPartyWindow
-    if '/' in msg:
-       import cheatCmd
-       cheatCmd.cmnd(msg)
     if gPartyWindow is not None and gPartyWindow() is not None:
-        gPartyWindow().onChatMessage(msg+'hello')
+        gPartyWindow().onChatMessage(msg)
+
 
 def _handleGainedTickets(count):
     bs.screenMessage(
