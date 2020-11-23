@@ -4,59 +4,33 @@ import bsInternal
 import bsPowerup
 import bsUtils
 import random
-import cheatCmd
+import chatCmd
 import time
+import getPermissionsHashes as gph
 import membersID as MID
 
-class chatFilter(object):#https://github.com/imayushsaini/Bombsquad-modded-server-Mr.Smoothy    
-#discord @mr.smoothy#5824   
+class chatFilter(object):
 
 
-    def checkAdmin(self,nick): 
+    def checkOwner(self,clientID): 
        
         client='kuchbhi'
         
         for i in bsInternal._getForegroundHostActivity().players:
             
-            if i.getName().encode('utf-8').find(nick)!=-1:
+            if i.getInputDevice().getClientID()==clientID:
                 client=i.get_account_id()
         
-        if client in MID.admins : 
-             #only admin access
+        if client in MID.owners: 
+            
             return True
             
         else:
-            pass
-        #https://github.com/imayushsaini/Bombsquad-modded-server-Mr.Smoothy    
-#discord @mr.smoothy#5824   
+            return False
 
-    def kickByNick(self,nick):
-        if nick!='':
-    	    roster=bsInternal._getGameRoster()
-    	    for i in roster:
-    	        
-    	        
-    	        try:
-    	        	#bsInternal._chatMessage(nick+' in try')
-    	            
-    	            
-    	            #bsInternal._chatMessage('encoded')
-    	            #bsInternal._chatMessage(i['players'][0]['nameFull'].encode('utf-8')+' comparing with '+nick.encode('utf-8'))
-    	            if i['players'][0]['nameFull'].find(nick) != -1:
-    	                bsInternal._chatMessage('abuse detected kicking '+nick)
-    	                bsInternal._disconnectClient(int(i['clientID']))
-
-    	        except:
-
-    	        	pass
-
-
-        else:
-            bsInternal._chatMessage("abuse detected")
-            bsInternal._chatMessage("will be banned manually by Mr.Smoothy")
+    
                   
-            #https://github.com/imayushsaini/Bombsquad-modded-server-Mr.Smoothy    
-#discord @mr.smoothy#5824   
+            
     def checkId(self,nick):
     		client_str=[]
     		for client in bsInternal._getGameRoster():
@@ -66,20 +40,19 @@ class chatFilter(object):#https://github.com/imayushsaini/Bombsquad-modded-serve
 
     		return client_str
 
-    def abusechatsave(self,gname,msg):
+    def abusechatsave(self,msg):
         with open(bs.getEnvironment()['systemScriptsDirectory'] + "/AbusedChat.txt",mode='a') as f:
-            f.write(str(self.checkId(gname))+'  || '+gname+' ||  '+msg+' \n')
+            f.write(str(msg+' \n'))
             f.close()
 			
 	       
-	#https://github.com/imayushsaini/Bombsquad-modded-server-Mr.Smoothy    
-#discord @mr.smoothy#5824   
+	
 
 	
 
 
 d=chatFilter()
-e=cheatCmd.cheatOptions()
+e=chatCmd.chatOptions()
 
 
 
@@ -92,34 +65,26 @@ def abusecheck(msg):
             break
         else:
         	pass
-def chat(msg):
+def chat(msg,clientID):
     if bsInternal._getForegroundHostActivity() is not None:
 	
-        n = msg.split(': ')
-        if abusecheck(n[1].lower()):
+        
+        if abusecheck(msg):
 
         	
         	
         	
-        	if n[0].endswith('...'):
+        	if True:
         		
-        		d.abusechatsave(n[0][:-3],n[1])
-        		if d.checkAdmin(n[0][:-3]):
+        		d.abusechatsave(msg)
+        		if d.checkOwner(clientID):
         			pass
         		else:	
-
-        			d.kickByNick(n[0][:-3])
-        	else:
-
-        		d.abusechatsave(n[0],n[1])
-        		if d.checkAdmin(n[0]):
-        			pass
-        		else:#https://github.com/imayushsaini/Bombsquad-modded-server-Mr.Smoothy    
-#discord @mr.smoothy#5824   
-
-        			
-        			d.kickByNick(n[0])  
-            
+                    		return True
+        			#bsInternal._disconnectClient(clientID)
+        	
+        else:
+            return False    
 #ADD YOUR CUSTOM BAD WORD LIST HERE 
 list1='mf 69 fuck mc bc lawde chutiya mother f**** laude chutiye maderchod maderchhod maderchood madarchod madarchhod chut bhen bsdk kaminey gaand g*** tatti pennis fucker madarchod machod chood machod f.u.c.k fck fkuc fuk sex sexy nigga'
 list2='asshole bc ass fuckoff cock hardcore leabian motherfuck lund dick dickhead nigga orgasm porn slut viagra whore dildo pussy piss hijde madar madarchodd chodd randi randiii lund lundd lode laude chuss land choot chut maa randy madarchodd nanga nangi benchod bancho behnchod gaand lundd '

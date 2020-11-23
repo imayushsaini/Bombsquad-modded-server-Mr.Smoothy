@@ -5,23 +5,11 @@ This will save all chat in text file in same directory.
 =============================
 Installation
 =============================
-1.We have to install pytz python lib.
 
-so first install pip
+1.copy chatLog.py in scripts folder 
 
-  # apt install python-pip
-  
-and now install pytz
-
-  # sudo pip install pytz
-
-(enter these commands in linux terminal)
-this lib. is used to set time by correct timezone for TimeStamp
-
-2.copy chatLog.py in scripts folder 
-
-3.open bsUi.py , search for method
- def _handleLocalChatMessage(msg): 
+2.open bsUi.py , search for method
+ def _filterChatMessage(msg, clientID): 
 
      and add these 2 lines
 
@@ -31,14 +19,26 @@ this lib. is used to set time by correct timezone for TimeStamp
 it should look like this 
 
 
-def _handleLocalChatMessage(msg):
-    global gPartyWindow
-    import chatLog
-    chatLog.chatLogg(msg)
+def _filterChatMessage(msg, clientID):
     
-   
-    if gPartyWindow is not None and gPartyWindow() is not None:
-        gPartyWindow().onChatMessage(msg)
+    if not msg or not msg.strip():
+        return None
+    else:    
+        import chatLog
+        chatLog.chatLogg(msg,clientID)
+
+        
+
+        else:
+            if '/' in msg:
+               import cheatCmd
+               cheatCmd.cmnd(msg,clientID)
+               return None
+            else:
+
+                return msg
+
+
 -----------------------------------------------------------
 
 

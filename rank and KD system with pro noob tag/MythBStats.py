@@ -14,6 +14,8 @@ import bs
 #change path according to you 
 #if you already using mystats.py or same 
 
+
+
 statsfile = 'stats2.json'
 htmlfile = 'index.html'
 

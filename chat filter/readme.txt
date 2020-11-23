@@ -8,24 +8,42 @@ Installation
 1.copy chatFilter.py in scripts folder 
 
 2.open bsUi.py , search for method
- def _handleLocalChatMessage(msg): 
 
-     and add these 2 lines
+ def _filterChatMessage(msg, clientID): 
+
+     and add these 4 lines
 
      import chatFilter
-     chatFilter.chat(msg)
+     if(chatFilter.chat(msg,clientID)):
+            bs.screenMessage('Please dont spoil environment',color=(1,0,0), clients=[clientID], transient=True)
+            bs.screenMessage('Dont Abuse',color=(1,0,0), clients=[clientID], transient=True)
 
 it should look like this 
 
 
-def _handleLocalChatMessage(msg):
-    global gPartyWindow
+def _filterChatMessage(msg, clientID):
     
-    import chatFilter
-    chatFilter.chat(msg)
-   
-    if gPartyWindow is not None and gPartyWindow() is not None:
-        gPartyWindow().onChatMessage(msg)
+    if not msg or not msg.strip():
+        return None
+    else:    
+        import chatLog
+        chatLog.chatLogg(msg,clientID)
+
+        import chatFilter
+        if(chatFilter.chat(msg,clientID)):
+            bs.screenMessage('Please dont spoil environment',color=(1,0,0), clients=[clientID], transient=True)
+            bs.screenMessage('Dont Abuse',color=(1,0,0), clients=[clientID], transient=True)
+
+        else:
+            if '/' in msg:
+               import cheatCmd
+               cheatCmd.cmnd(msg,clientID)
+               return None
+            else:
+
+                return msg
+
+
 -----------------------------------------------------------
 
 Modify chatFilter.py and add your words list in list tuple

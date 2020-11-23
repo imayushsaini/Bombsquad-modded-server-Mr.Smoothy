@@ -23883,6 +23883,7 @@ def _filterChatMessage(msg, clientID):
                 return msg
 
 
+
 # Called for local chat messages when the party window is up.
 def _handleLocalChatMessage(msg):
     global gPartyWindow
