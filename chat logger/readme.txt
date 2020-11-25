@@ -14,7 +14,7 @@ Installation
      and add these 2 lines
 
      import chatLog
-    chatLog.chatLogg(msg)
+    chatLog.chatLogg(msg,clientID)
 
 it should look like this 
 
