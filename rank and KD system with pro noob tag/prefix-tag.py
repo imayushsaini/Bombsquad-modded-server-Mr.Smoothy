@@ -105,7 +105,7 @@ class kdpronoobtag(object):
                                       owner=self.owner,
                                       attrs={'text':prefix, #prefix text
                                              'inWorld':True,
-                                             'shadow':1.2,
+                                             'shadow':0.7,
                                              'flatness':1.0,
                                              'color':prefixColor,
                                              'scale':0.2,
@@ -156,7 +156,7 @@ class kdtag(object):
                                       owner=self.owner,
                                       attrs={'text':" K.D:"+str(kd), #prefix text
                                              'inWorld':True,
-                                             'shadow':1.2,
+                                             'shadow':0.7,
                                              'flatness':1.0,
                                              'color':prefixColor,
                                              'scale':-0.8,
@@ -197,7 +197,7 @@ class ranktag(object):
                                       owner=self.owner,
                                       attrs={'text':" #"+str(prank), #prefix text
                                              'inWorld':True,
-                                             'shadow':1.2,
+                                             'shadow':0.7,
                                              'flatness':1.0,
                                              'color':prefixColor,
                                              'scale':0.0,
